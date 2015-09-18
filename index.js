@@ -11,24 +11,28 @@ var EndPoint = Generator.generate(function EndPoint(options) {
 EndPoint.Joi = Joi;
 
 EndPoint.definePrototype({
-    incomingScema: Joi.object(),
-    outgoingScema: Joi.object(),
+    incomingSchema: Joi.object(),
+    outgoingSchema: Joi.object(),
     run: function run(data, done) {
         var _ = this;
 
         function validateIncoming(next) {
-            Joi.validate(data, _.incomingScema, _.validateOptions, next);
+            console.log("validateIncoming", data);
+            Joi.validate(data, _.incomingSchema, _.validateOptions, next);
         }
 
         function runIncoming(data, next) {
+            console.log("runIncoming", data);
             _.incoming(data, next);
         }
 
         function validateOutgoing(data, next) {
-            Joi.validate(data, _.outgoingScema, _.validateOptions, next);
+            console.log("validateOutgoing", data);
+            Joi.validate(data, _.outgoingSchema, _.validateOptions, next);
         }
 
         function runOutgoing(data, next) {
+            console.log("runOutgoing", data);
             _.outgoing(data, next);
         }
 
