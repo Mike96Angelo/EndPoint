@@ -4,8 +4,14 @@ var Generator = require('generate-js'),
 
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
+    
+    options.validateOptions = options.validateOptions || {
+        abortEarly: false,
+        stripUnknown: true
+    };
 
     _.defineProperties(options);
+    _.debug = false;
 });
 
 EndPoint.Joi = Joi;
@@ -17,12 +23,12 @@ EndPoint.definePrototype({
         var _ = this;
 
         function validateIncoming(next) {
-            console.log("validateIncoming", data);
+            _.debug && console.log("validateIncoming", data);
             Joi.validate(data, _.incomingSchema, _.validateOptions, next);
         }
 
         function runIncoming(data, next) {
-            console.log("runIncoming", data);
+            _.debug && console.log("runIncoming", data);
             _.incoming(data, next);
         }
 
@@ -32,7 +38,7 @@ EndPoint.definePrototype({
         }
 
         function runOutgoing(data, next) {
-            console.log("runOutgoing", data);
+            _.debug && console.log("runOutgoing", data);
             _.outgoing(data, next);
         }
 
