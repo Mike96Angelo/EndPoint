@@ -4,6 +4,11 @@ var Generator = require('generate-js'),
 
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
+    
+    options.validateOptions = options.validateOptions || {
+        abortEarly: false,
+        stripUnknown: true
+    };
 
     _.defineProperties(options);
     _.debug = false;
