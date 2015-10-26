@@ -4,7 +4,7 @@ var Generator = require('generate-js'),
 
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
-    
+
     options.validateOptions = options.validateOptions || {
         abortEarly: false,
         stripUnknown: true
@@ -27,13 +27,18 @@ EndPoint.definePrototype({
             Joi.validate(data, _.incomingSchema, _.validateOptions, next);
         }
 
+        function validateAuth(data, next) {
+            _.debug && console.log("validateAuth", data);
+            _.auth(data, next);
+        }
+
         function runIncoming(data, next) {
             _.debug && console.log("runIncoming", data);
             _.incoming(data, next);
         }
 
         function validateOutgoing(data, next) {
-            console.log("validateOutgoing", data);
+            _.debug && console.log("validateOutgoing", data);
             Joi.validate(data, _.outgoingSchema, _.validateOptions, next);
         }
 
@@ -44,10 +49,17 @@ EndPoint.definePrototype({
 
         async.waterfall([
             validateIncoming,
+            validateAuth,
             runIncoming,
             validateOutgoing,
             runOutgoing
         ], done);
+    },
+
+    auth: function auth(data, done) {
+        var _ = this;
+
+        done(null, data);
     },
 
     incoming: function incoming(data, done) {
