@@ -20,58 +20,28 @@ EndPoint.definePrototype({
     incomingSchema: Joi.object(),
     outgoingSchema: Joi.object(),
     run: function run(data, done) {
-        var _ = this;
+        var _ = this,
+            arr = [];
 
         function validateIncoming(next) {
-            _.debug && console.log("validateIncoming", data);
+            _.debug && console.log('validateIncoming', data);
             Joi.validate(data, _.incomingSchema, _.validateOptions, next);
         }
 
-        function validateAuth(data, next) {
-            _.debug && console.log("validateAuth", data);
-            _.auth(data, next);
-        }
-
-        function runIncoming(data, next) {
-            _.debug && console.log("runIncoming", data);
-            _.incoming(data, next);
-        }
-
         function validateOutgoing(data, next) {
-            _.debug && console.log("validateOutgoing", data);
+            _.debug && console.log('validateOutgoing', data);
             Joi.validate(data, _.outgoingSchema, _.validateOptions, next);
         }
 
-        function runOutgoing(data, next) {
-            _.debug && console.log("runOutgoing", data);
-            _.outgoing(data, next);
+        arr.push(validateIncoming);
+
+        for (var i = 0; i < _.filters.length; i++) {
+            arr.push(_.filters[i]);
         }
 
-        async.waterfall([
-            validateIncoming,
-            validateAuth,
-            runIncoming,
-            validateOutgoing,
-            runOutgoing
-        ], done);
-    },
+        arr.push(validateOutgoing);
 
-    auth: function auth(data, done) {
-        var _ = this;
-
-        done(null, data);
-    },
-
-    incoming: function incoming(data, done) {
-        var _ = this;
-
-        done(null, data);
-    },
-
-    outgoing: function outgoing(data, done) {
-        var _ = this;
-
-        done(null, data);
+        async.waterfall(arr, done);
     }
 });
 
