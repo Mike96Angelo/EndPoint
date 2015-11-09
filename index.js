@@ -2,6 +2,25 @@ var Generator = require('generate-js'),
     Joi = require('joi'),
     async = require('async');
 
+function TRY_CATCH(func, options, callback) {
+    try {
+        if (func.length === 3) {
+            func.call(null, options.data, options, callback);
+        } else if (func.length === 2) {
+            func.call(null, options.data, callback);
+        } else if (func.length === 1) {
+            func.call(null, callback);
+        } else {
+            func.call(null);
+            async.setImmediate(function () {
+                callback();
+            });
+        }
+    } catch (err) {
+        callback(err);
+    }
+}
+
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
 
@@ -69,18 +88,7 @@ EndPoint.definePrototype({
 
                 _.debug && console.log('FILTER: ' + func.name, options.data);
 
-                if (func.length === 3) {
-                    func.call(null, options.data, options, next);
-                } else if (func.length === 2) {
-                    func.call(null, options.data, next);
-                } else if (func.length === 1) {
-                    func.call(null, next);
-                } else {
-                    func.call(null);
-                    async.setImmediate(function () {
-                        next();
-                    });
-                }
+                TRY_CATCH(func, options, next);
             },
             function callback(err) {
                 _.debug && console.log('OUT: ', options.data);
@@ -93,18 +101,7 @@ EndPoint.definePrototype({
 
                             _.debug && console.log('CLEANER: ' + func.name, options.data);
 
-                            if (func.length === 3) {
-                                func.call(null, options.data, options, next);
-                            } else if (func.length === 2) {
-                                func.call(null, options.data, next);
-                            } else if (func.length === 1) {
-                                func.call(null, next);
-                            } else {
-                                func.call(null);
-                                async.setImmediate(function () {
-                                    next();
-                                });
-                            }
+                            TRY_CATCH(func, options, next);
                         },
                         function callback(cleaning_err) {
                             _.debug && console.log('CLEANED: ', options.data);
