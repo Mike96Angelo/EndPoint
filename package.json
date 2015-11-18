@@ -1,6 +1,6 @@
 {
   "name": "api-endpoint",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "EndPoint is a schema-validated waterfall.",
   "main": "index.js",
   "scripts": {

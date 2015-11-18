@@ -17,6 +17,7 @@ function TRY_CATCH(func, options, callback) {
             });
         }
     } catch (err) {
+        console.error(err.stack);
         callback(err);
     }
 }
@@ -92,7 +93,8 @@ EndPoint.definePrototype({
             },
             function callback(err) {
                 _.debug && console.log('OUT: ', options.data);
-                _.debug && err && console.log('ERROR: ', err);
+                _.debug && err && console.log('ERROR: ');
+                _.debug && err && console.error(err.stack);
                 if (err) {
                     async.eachSeries(
                         errs,
@@ -105,7 +107,8 @@ EndPoint.definePrototype({
                         },
                         function callback(cleaning_err) {
                             _.debug && console.log('CLEANED: ', options.data);
-                            _.debug && err && console.log('CLEANING-ERROR: ', cleaning_err);
+                            _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
+                            _.debug && cleaning_err && console.error(cleaning_err.stack);
                             done(err, null);
                         }
                     );
