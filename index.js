@@ -22,15 +22,37 @@ function TRY_CATCH(func, options, callback) {
     }
 }
 
+function validate(key, request, options, next) {
+    var _ = this,
+        result = Joi.validate(request[key], _[key], _.validateOptions);
+
+    request[key] = result.value;
+
+    next(result.error || null);
+}
+
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
 
-    options.validateOptions = options.validateOptions || {
-        abortEarly: false,
-        stripUnknown: true
-    };
-
     _.defineProperties(options);
+
+    _.defineProperties({
+        validateHeaders: function (request, done) {
+            validate.call(_, 'headers', request, done);
+        },
+        validatePayload: function (request, done) {
+            validate.call(_, 'payload', request, done);
+        },
+        validateQuery: function (request, done) {
+            validate.call(_, 'query', request, done);
+        },
+        validateParams: function (request, done) {
+            validate.call(_, 'params', request, done);
+        },
+        validateResponse: function (request, done) {
+            validate.call(_, 'response', request, done);
+        }
+    });
     _.debug = false;
 });
 
@@ -44,44 +66,9 @@ EndPoint.definePrototype({
 
     response:  Joi.object(),
 
-    validateHeaders: function validateHeaders(request, options, next) {
-        var result = Joi.validate(request.headers, _.headers, _.validateOptions);
-
-        request.headers = result.value;
-
-        next(result.error || null);
-    },
-
-    validatePayload: function validatePayload(request, options, next) {
-        var result = Joi.validate(request.payload, _.payload, _.validateOptions);
-
-        request.payload = result.value;
-
-        next(result.error || null);
-    },
-
-    validateQuery: function validateQuery(request, options, next) {
-        var result = Joi.validate(request.query, _.query, _.validateOptions);
-
-        request.query = result.value;
-
-        next(result.error || null);
-    },
-
-    validateParams: function validateParams(request, options, next) {
-        var result = Joi.validate(request.params, _.params, _.validateOptions);
-
-        request.params = result.value;
-
-        next(result.error || null);
-    },
-
-    validateResponse: function validateResponse(request, options, next) {
-        var result = Joi.validate(request.response, _.response, _.validateOptions);
-
-        request.response = result.value;
-
-        next(result.error || null);
+    validateOptions: {
+        abortEarly: false,
+        stripUnknown: true
     },
 
     run: function run(request, done) {
