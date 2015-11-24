@@ -82,6 +82,8 @@ EndPoint.definePrototype({
             cleaners = [],
             options = {};
 
+        request.response = {};
+
         for (var i = 0; i < _.filters.length; i++) {
             filters.push(_.filters[i]);
         }
