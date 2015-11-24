@@ -129,7 +129,7 @@ EndPoint.definePrototype({
                         }
                     );
                 } else {
-                    done(null, request);
+                    done(null, request.response);
                 }
             }
         );
