@@ -22,7 +22,7 @@ function TRY_CATCH(func, request, options, callback) {
     }
 }
 
-function validate(key, request, options, next) {
+function validate(key, request, next) {
     var _ = this,
         result = Joi.validate(request[key], _[key], _.validateOptions);
 
