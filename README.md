@@ -9,9 +9,15 @@ var EndPoint = require('api-endpoint'),
     Joi = EndPoint.Joi;
 
 var myEndpoint = EndPoint.create({
-    incomingSchema: Joi.object().keys({}),
+    headers: Joi.object(), // Headers validator
 
-    outgoingSchema: Joi.object().keys({}),
+    payload: Joi.object(), // Payload validator
+
+    query: Joi.object(), // Query string validator
+
+    params: Joi.object(), // URL string validator
+
+    response: Joi.object(), // Response validator
 
     validateOptions: { // optional JOI validation options
         abortEarly: false,
