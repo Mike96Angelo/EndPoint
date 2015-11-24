@@ -2,12 +2,12 @@ var Generator = require('generate-js'),
     Joi = require('joi'),
     async = require('async');
 
-function TRY_CATCH(func, options, callback) {
+function TRY_CATCH(func, request, options, callback) {
     try {
         if (func.length === 3) {
-            func.call(null, options.request, options, callback);
+            func.call(null, request, options, callback);
         } else if (func.length === 2) {
-            func.call(null, options.request, callback);
+            func.call(null, request, callback);
         } else if (func.length === 1) {
             func.call(null, callback);
         } else {
@@ -101,12 +101,12 @@ EndPoint.definePrototype({
                     }
                 }
 
-                _.debug && console.log('FILTER: ' + func.name, options.request);
+                _.debug && console.log('FILTER: ' + func.name, request);
 
-                TRY_CATCH(func, options, next);
+                TRY_CATCH(func, request, options, next);
             },
             function callback(err) {
-                _.debug && console.log('OUT: ', options.request);
+                _.debug && console.log('OUT: ', request);
                 _.debug && err && console.log('ERROR: ');
                 _.debug && err && console.error(err.stack);
                 if (err) {
@@ -115,19 +115,19 @@ EndPoint.definePrototype({
                         function iterator(item, next) {
                             var func = item;
 
-                            _.debug && console.log('CLEANER: ' + func.name, options.request);
+                            _.debug && console.log('CLEANER: ' + func.name, request);
 
-                            TRY_CATCH(func, options, next);
+                            TRY_CATCH(func, request, options, next);
                         },
                         function callback(cleaning_err) {
-                            _.debug && console.log('CLEANED: ', options.request);
+                            _.debug && console.log('CLEANED: ', request);
                             _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
                             _.debug && cleaning_err && console.error(cleaning_err.stack);
                             done(err, null);
                         }
                     );
                 } else {
-                    done(null, options.request);
+                    done(null, request);
                 }
             }
         );
