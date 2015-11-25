@@ -59,12 +59,12 @@ var EndPoint = Generator.generate(function EndPoint(options) {
 EndPoint.Joi = Joi;
 
 EndPoint.definePrototype({
-    headers:   Joi.object(),
-    payload:   Joi.object(),
-    query:     Joi.object(),
-    params:    Joi.object(),
+    headers:   Joi.object().allow(null),
+    payload:   Joi.object().allow(null),
+    query:     Joi.object().allow(null),
+    params:    Joi.object().allow(null),
 
-    response:  Joi.object(),
+    response:  Joi.object().allow(null),
 
     validateOptions: {
         abortEarly: false,
