@@ -22,6 +22,16 @@ function TRY_CATCH(func, request, options, callback) {
     }
 }
 
+function downcaseKeys(obj) {
+    var newObj = {};
+
+    for (var key in obj) {
+        newObj[key.toLowerCase()] = obj[key];
+    }
+
+    return newObj;
+}
+
 function validate(key, request, next) {
     var _ = this,
         result = Joi.validate(request[key], _[key], _.validateOptions);
@@ -83,6 +93,7 @@ EndPoint.definePrototype({
             options = {};
 
         request.response = {};
+        request.headers = downcaseKeys(request.headers);
 
         for (var i = 0; i < _.filters.length; i++) {
             filters.push(_.filters[i]);
@@ -111,6 +122,7 @@ EndPoint.definePrototype({
                 _.debug && console.log('OUT: ', request);
                 _.debug && err && console.log('ERROR: ');
                 _.debug && err && console.error(err.stack);
+
                 if (err) {
                     async.eachSeries(
                         cleaners,
@@ -125,7 +137,7 @@ EndPoint.definePrototype({
                             _.debug && console.log('CLEANED: ', request);
                             _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
                             _.debug && cleaning_err && console.error(cleaning_err.stack);
-                            done(err, null);
+                            done(null, { error: err.message });
                         }
                     );
                 } else {
