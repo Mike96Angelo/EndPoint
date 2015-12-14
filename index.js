@@ -33,8 +33,9 @@ function downcaseKeys(obj) {
 }
 
 function validate(key, request, next) {
-    var _ = this,
-        result = Joi.validate(request[key], _[key], _.validateOptions);
+    var _ = this;
+
+    var result = Joi.validate(request[key], _[key], _.validateOptions);
 
     request[key] = result.value;
 
@@ -137,6 +138,7 @@ EndPoint.definePrototype({
                             _.debug && console.log('CLEANED: ', request);
                             _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
                             _.debug && cleaning_err && console.error(cleaning_err.stack);
+
                             done(null, { error: err.message });
                         }
                     );
