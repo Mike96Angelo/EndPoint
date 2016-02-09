@@ -1,6 +1,6 @@
 {
   "name": "api-endpoint",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "EndPoint is a schema-validated waterfall.",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Mike96Angelo/EndPoint#readme",
   "dependencies": {
     "async": "^1.4.2",
-    "generate-js": "^2.1.1",
+    "generate-js": "^2.1.3",
     "joi": "^6.7.1"
   }
 }
