@@ -139,7 +139,7 @@ EndPoint.definePrototype({
                             _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
                             _.debug && cleaning_err && console.error(cleaning_err.stack);
 
-                            done(null, { error: err || err.message });
+                            done(null, request.response);
                         }
                     );
                 } else {
