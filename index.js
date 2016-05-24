@@ -45,6 +45,15 @@ function validate(key, request, next) {
 var EndPoint = Generator.generate(function EndPoint(options) {
     var _ = this;
 
+    if (typeof options.formatResponse !== 'function') {
+        options.formatResponse = function formatResponse(err, request, options, done) {
+            if (err) console.error(err);
+            done(err, request.response);
+        }
+    }
+
+    if (typeof options.debug === 'undefined') options.debug = false;
+
     _.defineProperties(options);
 
     _.defineProperties({
@@ -64,7 +73,6 @@ var EndPoint = Generator.generate(function EndPoint(options) {
             validate.call(_, 'response', request, done);
         }
     });
-    _.debug = false;
 });
 
 EndPoint.Joi = Joi;
@@ -138,12 +146,11 @@ EndPoint.definePrototype({
                             _.debug && console.log('CLEANED: ', request);
                             _.debug && cleaning_err && console.log('CLEANING-ERROR: ');
                             _.debug && cleaning_err && console.error(cleaning_err.stack);
-
-                            done(null, request.response);
+                            _.formatResponse(err, request, options, done);
                         }
                     );
                 } else {
-                    done(null, request.response);
+                    _.formatResponse(null, request, options, done);
                 }
             }
         );
