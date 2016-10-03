@@ -1,5 +1,10 @@
 # EndPoint
 
+[![GitHub release](https://img.shields.io/github/release/Mike96angelo/EndPoint.svg?maxAge=21600)](https://github.com/Mike96Angelo/EndPoint)
+[![npm version](https://img.shields.io/npm/v/api-endpoint.svg?maxAge=21600)](https://www.npmjs.com/package/api-endpoint)
+[![npm downloads](https://img.shields.io/npm/dm/api-endpoint.svg?maxAge=604800)](https://www.npmjs.com/package/api-endpoint)
+[![npm downloads](https://img.shields.io/npm/dt/api-endpoint.svg?maxAge=604800)](https://www.npmjs.com/package/api-endpoint)
+
 EndPoint is a schema-validated waterfall.
 
 ### What does an endpoint look like?
